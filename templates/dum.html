@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sample Hiding</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .keyboard {
+        display: block;
+        width: 200px;
+        height: 100px;
+        background-color: lightblue;
+        margin: 20px;
+      }
+
+      .reveal {
+        opacity: 1;
+        transition: opacity 0.5s;
+      }
+
+      .hide {
+        opacity: 0;
+        pointer-events: none; /* Disable pointer events for hidden element */
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var shouldHide = true;
+
+        var keyboard = document.getElementById("kbui");
+
+        if (shouldHide) {
+          keyboard.classList.add("hide");
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="kbui" class="keyboard reveal">
+      <p>This is the keyboard element</p>
+    </div>
+  </body>
+</html>

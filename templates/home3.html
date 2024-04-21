@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Touch Typing Home</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    {% extends 'navbar.html' %} {% block content %} {% load static %}
+    <style>
+      body {
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+        background-image: url("{% static 'images/background2.jpeg' %}");
+        background-size: 120% 120%;
+        background-color: #000000;
+      }
+
+      .typing-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40%;
+        height: 20%;
+        background-color: #31313152;
+        border: 0.5vh solid #ffffff;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        color: #ffffff;
+        border-radius: 1vh;
+        backdrop-filter: blur(5px);
+      }
+
+      .keyboard {
+        /* background-color: aqua; */
+        transform: translateZ(0);
+        width: 65%;
+      }
+      .keyboard1 {
+        /* background-color: aqua; */
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(14, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+      }
+
+      .keyboard2 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(13, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+        justify-content: center;
+      }
+
+      .keyboard3 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+      }
+
+      .keyboard4 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(11, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+        justify-content: center;
+        /* background-color: aquamarine; */
+      }
+
+      .key {
+        padding: 10px;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.185);
+        border: solid;
+        border-color: #ffffff;
+        border-width: 0.5vh;
+        color: #ffffff;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 15px;
+        backdrop-filter: blur(2px);
+        transition: 0.29s;
+      }
+
+      .key:hover {
+        backdrop-filter: blur(15px);
+        background-color: #00000077;
+      }
+
+      .key-alt2,
+      .key-ctrl2 {
+        color: #000000;
+        position: relative;
+        left: 521%;
+        cursor: pointer;
+        border-radius: 2px;
+        background-color: rgba(194, 98, 19, 0.6);
+        border: solid;
+        border-color: #6d6d6d;
+        border-width: 3px;
+      }
+      .poptext {
+        margin-right: 10px;
+        margin-left: 10px;
+        padding: 4px 6px;
+        background: rgba(255, 255, 255, 0.5);
+        border: 0;
+        outline: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.25s;
+      }
+      .poptext:hover {
+        background: rgba(255, 255, 255, 0.5);
+        /* color: white; */
+        border: solid;
+        border-color: rgba(255, 255, 255, 0.9);
+      }
+      .popup {
+        width: 300px;
+        height: 150px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0)
+        );
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        text-align: center;
+        padding: 0 30px 30px;
+        color: rgb(0, 0, 0);
+        border-color: rgba(255, 255, 255, 0.2);
+        visibility: hidden;
+        transition: transform 0.5s, top 0.5s;
+        border-style: solid;
+      }
+      .open-popup {
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+        top: 14%;
+      }
+      .area {
+        margin-top: 12px;
+      }
+      .popup h2 {
+        font-size: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .popup p {
+        font-size: 15px;
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="typing-container" id="current-letter-display"></div>
+      <div class="keyboard">
+        <div class="keyboard1">
+          <button class="key">TAB</button>
+          <button class="key">Q</button>
+          <button class="key">W</button>
+          <button class="key">E</button>
+          <button class="key">R</button>
+          <button class="key">T</button>
+          <button class="key">Y</button>
+          <button class="key">U</button>
+          <button class="key">I</button>
+          <button class="key">O</button>
+          <button class="key">P</button>
+          <button class="key">[</button>
+          <button class="key">]</button>
+          <button class="key">\</button>
+        </div>
+        <div class="keyboard2">
+          <button class="key">CAPS LOCK</button>
+          <button class="key">A</button>
+          <button class="key">S</button>
+          <button class="key">D</button>
+          <button id="fkey" class="key">F</button>
+          <button class="key">G</button>
+          <button class="key">H</button>
+          <button class="key">J</button>
+          <button class="key">K</button>
+          <button class="key">L</button>
+          <button class="key">;</button>
+          <button class="key">'</button>
+          <button class="key">RETURN</button>
+        </div>
+        <div class="keyboard3">
+          <button class="key">SHIFT</button>
+          <button class="key">Z</button>
+          <button class="key">X</button>
+          <button class="key">C</button>
+          <button class="key">V</button>
+          <button class="key">B</button>
+          <button class="key">N</button>
+          <button class="key">M</button>
+          <button class="key">,</button>
+          <button class="key">.</button>
+          <button class="key">/</button>
+          <button class="key">SHIFT</button>
+        </div>
+        <div class="keyboard4">
+          <!-- <button class="key">/</button> -->
+          <button class="key">CONTROL</button>
+          <button class="key">WINDOWS</button>
+          <button class="key">ALT</button>
+          <button style="width: 619%" class="key" id="spaceKey 5fr">
+            SPACE
+          </button>
+          <!-- <button class="key key-alt2">ALT</button>
+          <button class="key key-ctrl2">CONTROL</button>  -->
+        </div>
+
+        <!-- Include all other keys -->
+        <!-- For brevity, including only a few keys -->
+        <div class="popup" id="popup">
+          <h2 id="pop-content"></h2>
+          <p class="desc">
+            Press Space, Once to continue to lessons. Twice to retake the test.
+          </p>
+          <div class="area">
+            <button type="button" class="poptext" onclick="redirectToHome()">
+              Continue
+            </button>
+            <button type="button" class="poptext" onclick="reloadTest()">
+              Retake
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Include all other keys -->
+    <!-- For brevity, including only a few keys -->
+
+    <!-- <script src="script.js"></script> -->
+
+    <script>
+      var elementsWithKeyClass = document.querySelectorAll(".key");
+
+      // Loop through each element and add tabindex="-1"
+      elementsWithKeyClass.forEach(function (element) {
+        element.setAttribute("tabindex", "-1");
+      });
+      function redirectToHome() {
+        window.location.href = "/";
+      }
+      function reloadTest() {
+        window.location.href = "/take-test";
+      }
+      $(document).ready(function () {
+        // var generatedTexts = {{ generated_texts_context }};
+        const generatedTextsJson = "{{ generated_texts_context|escapejs }}";
+        const generatedTexts = JSON.parse(generatedTextsJson);
+
+        console.log(generatedTexts);
+
+        // console.log(generatedTexts);
+
+        // Access generated texts using JavaScript
+        console.log(generatedTexts[Object.keys(generatedTexts)[0]]);
+        console.log(Object.keys(generatedTexts).length);
+        var level = 0;
+        const generatedText_array = Object.values(generatedTexts).flat();
+        var generatedText = generatedText_array[0];
+        var currentIndex = 0;
+        var incorrectKeyPressCount = 0;
+        var text = "level 1";
+        text_to_speech(text);
+        var size = {{size}};
+        var popUpDisplayed = false; // Flag to track if the pop-up has been displayed
+        var paragraphElement = document.getElementById(
+          "current-letter-display"
+        );
+
+        function text_to_speech(text) {
+          // Check if the SpeechSynthesis API is supported in the browser
+          if ("speechSynthesis" in window) {
+            // Create a new SpeechSynthesisUtterance object
+            var utterance = new SpeechSynthesisUtterance();
+
+            // Set the text to be spoken
+            utterance.text = text;
+
+            // Use the SpeechSynthesis API to speak the text
+            speechSynthesis.speak(utterance);
+          } else {
+            // SpeechSynthesis API not supported
+            console.log("Speech synthesis not supported in this browser.");
+          }
+        }
+
+        function displayNextLetter() {
+          var currentLetter = generatedText[currentIndex];
+          // Update the content of the <p> element with the current letter
+          $("#current-letter-display").text(currentLetter);
+
+          // Pronounce the current letter using text_to_speech
+          text_to_speech(currentLetter);
+        }
+
+        function playWarningSound() {
+          // Replace 'path/to/warning-sound.mp3' with the actual path to your sound file
+          var audio = new Audio("{% static 'audio/wrong-answer-126515.mp3' %}");
+          audio.play();
+        }
+        let popup = document.getElementById("popup");
+
+        function openpopup() {
+          popup.classList.add("open-popup");
+        }
+        function closepopup() {
+          popup.classList.remove("open-popup");
+        }
+        // Call the function initially
+        displayNextLetter();
+        var shiftPressed = false;
+
+        $(document).keydown(function (event) {
+          // Check if the pressed key is Shift
+          if (event.key === "Shift") {
+            shiftPressed = true;
+            console.log("Shift key pressed");
+            text_to_speech(generatedText[currentIndex]);
+          }
+        });
+
+        $(document).keyup(function (event) {
+          // Reset the shiftPressed variable when the Shift key is released
+          if (event.key === "Shift") {
+            shiftPressed = false;
+            console.log("Shift key released");
+          }
+        });
+        let spaceKeyPressCount = 0;
+        let spaceKeyDown = false;
+        let spaceKeyTimeout;
+
+        const SPACE_KEY_CODE = 32; // Key code for the space key
+
+        $(document).keydown(function (event) {
+          if (
+            event.keyCode === SPACE_KEY_CODE &&
+            !spaceKeyDown &&
+            popUpDisplayed
+          ) {
+            spaceKeyDown = true;
+            spaceKeyPressCount++;
+
+            // Clear any existing timeout
+            clearTimeout(spaceKeyTimeout);
+
+            // Set a new timeout after 1 second
+            spaceKeyTimeout = setTimeout(function () {
+              handleSpaceKeyPress();
+            }, 1000);
+          }
+        });
+
+        $(document).keyup(function (event) {
+          if (event.keyCode === SPACE_KEY_CODE) {
+            spaceKeyDown = false;
+          }
+        });
+
+        function handleSpaceKeyPress() {
+          // Check the number of space key presses
+          if (spaceKeyPressCount === 1) {
+            // Single space pressed, trigger "Continue"
+            console.log("Single space pressed - Continue");
+            window.location.href = "/";
+          } else if (spaceKeyPressCount >= 2 && level === 10) {
+            // Double space pressed, trigger "Retake"
+            closepopup();
+            console.log("Double space pressed - Retake");
+            window.location.href = "/check-position";
+          } else if (spaceKeyPressCount >= 2) {
+            // Double space pressed, trigger "Retake"
+            closepopup();
+            console.log("Double space pressed - Retake");
+            window.location.href = "/take-test";
+          }
+
+          // Reset the space key press count
+          spaceKeyPressCount = 0;
+        }
+
+        // Example event listener for validation (you need to adjust this based on your validation logic)
+        $(document).keypress(function (event) {
+          var typedLetter = String.fromCharCode(event.which).toLowerCase();
+          var expectedLetter;
+
+          if (shiftPressed) {
+            console.log("Shift key is still pressed");
+            // Handle the Shift key behavior here
+            text_to_speech(generatedText[currentIndex]);
+            return;
+          }
+
+          // if (currentIndex <= generatedText.length) {
+          //   expectedLetter = generatedText[currentIndex - 1];
+          // } else if (
+          //   currentIndex <=
+          //   generatedText.length + generatedText2.length
+          // ) {
+          //   expectedLetter =
+          //     generatedText2[currentIndex - generatedText.length - 1];
+          // }
+          expectedLetter = generatedText[currentIndex];
+          if (level === 10) {
+            var ptext = `You're in Level ${level + 1} `;
+            console.log(ptext);
+            $("#pop-content").text(ptext);
+            openpopup();
+            text_to_speech(`The test is over. You are in level ${level + 1}`);
+            console.log("end");
+            $("#desc").text("congratulations! Now you can create an account");
+            text_to_speech("Hit space twice to create an account.");
+            popUpDisplayed = true;
+          }
+          if (typedLetter === expectedLetter) {
+            console.log("goodjob");
+            paragraphElement.style.color = "#fff";
+            currentIndex++;
+            if (currentIndex === size) {
+              currentIndex = 0;
+              level++;
+              text = `level ${level + 1}`;
+              text_to_speech(text);
+              console.log("level incrementing");
+              generatedText = generatedText_array[level];
+              displayNextLetter();
+            } else {
+              displayNextLetter();
+              console.log(currentIndex);
+              console.log(level);
+            }
+          } else {
+            // playWarningSound();
+
+            // Change the color of the element to red
+            paragraphElement.style.color = "red";
+            // Validation failed, handle accordingly
+            console.log("Validation failed");
+            console.log(typedLetter);
+            console.log(expectedLetter);
+            // Increment incorrect key press count
+            incorrectKeyPressCount++;
+
+            // Check if the user has reached 4 incorrect key presses
+
+            if (
+              (incorrectKeyPressCount >= 4 && !popUpDisplayed) ||
+              level === 10
+            ) {
+              var ptext = `You're in Level ${level + 1} `;
+              console.log(ptext);
+              $("#pop-content").text(ptext);
+              openpopup();
+              text_to_speech(`The test is over. You are in level ${level + 1}`);
+              text_to_speech(
+                "hit space key. once to continue with lessons, twice to retake the test"
+              );
+              // Display a pop-up
+
+              popUpDisplayed = true; // Set the flag to true
+              var levelValue = level + 1; // Replace this with the actual value of your level variable
+
+              $.ajax({
+                type: "POST",
+                url: "/update_level/",
+                data: {
+                  level: levelValue,
+                  csrfmiddlewaretoken: "{{ csrf_token }}", // Include CSRF token for security
+                },
+                success: function (response) {
+                  console.log("Level saved successfully");
+                },
+                error: function (error) {
+                  console.error("Error saving level:", error);
+                },
+              });
+
+              // Terminate the program
+              throw new Error("Terminating program");
+            }
+          }
+        });
+      });
+    </script>
+    {% endblock %}
+  </body>
+</html>

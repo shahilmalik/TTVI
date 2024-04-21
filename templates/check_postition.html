@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Touch Typing Home</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    {% extends 'navbar.html' %} {% block content %} {% load static %}
+    <style>
+      body {
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+        background-image: url("{% static 'images/background2.jpeg' %}");
+        background-size: 120% 120%;
+        background-color: #000000;
+      }
+
+      .typing-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40%;
+        height: 20%;
+        background-color: #31313152;
+        border: 0.5vh solid #ffffff;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        color: #ffffff;
+        border-radius: 1vh;
+        backdrop-filter: blur(5px);
+      }
+
+      .keyboard {
+        /* background-color: aqua; */
+        transform: translateZ(0);
+        width: 65%;
+      }
+      .keyboard1 {
+        /* background-color: aqua; */
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(14, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+      }
+
+      .keyboard2 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(13, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+        justify-content: center;
+      }
+
+      .keyboard3 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+      }
+
+      .keyboard4 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(11, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+        justify-content: center;
+        /* background-color: aquamarine; */
+      }
+
+      .key {
+        padding: 10px;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.185);
+        border: solid;
+        border-color: #ffffff;
+        border-width: 0.5vh;
+        color: #ffffff;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 15px;
+        backdrop-filter: blur(2px);
+        transition: 0.29s;
+      }
+      .rightpress {
+        border-color: green;
+      }
+
+      .key:hover {
+        backdrop-filter: blur(15px);
+        background-color: #00000077;
+      }
+
+      .key-alt2,
+      .key-ctrl2 {
+        color: #000000;
+        position: relative;
+        left: 521%;
+        cursor: pointer;
+        border-radius: 2px;
+        background-color: rgba(194, 98, 19, 0.6);
+        border: solid;
+        border-color: #6d6d6d;
+        border-width: 3px;
+      }
+      .poptext {
+        margin-right: 10px;
+        margin-left: 10px;
+        padding: 4px 6px;
+        background: rgba(255, 255, 255, 0.5);
+        border: 0;
+        outline: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.25s;
+      }
+      .poptext:hover {
+        background: rgba(255, 255, 255, 0.5);
+        /* color: white; */
+        border: solid;
+        border-color: rgba(255, 255, 255, 0.9);
+      }
+      .popup {
+        width: 300px;
+        height: 150px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0)
+        );
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        text-align: center;
+        padding: 0 30px 30px;
+        color: rgb(0, 0, 0);
+        border-color: rgba(255, 255, 255, 0.2);
+        visibility: hidden;
+        transition: transform 0.5s, top 0.5s;
+        border-style: solid;
+      }
+      .open-popup {
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+        top: 14%;
+      }
+      .area {
+        margin-top: 12px;
+      }
+      .popup h2 {
+        font-size: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .popup p {
+        font-size: 15px;
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="keyboard">
+        <div class="keyboard1">
+          <button class="key">TAB</button>
+          <button id="q" class="key">Q</button>
+          <button id="w" class="key">W</button>
+          <button id="e" class="key">E</button>
+          <button id="r" class="key">R</button>
+          <button id="t" class="key">T</button>
+          <button id="y" class="key">Y</button>
+          <button id="u" class="key">U</button>
+          <button id="i" class="key">I</button>
+          <button id="o" class="key">O</button>
+          <button id="p" class="key">P</button>
+          <button id="]" class="key">[</button>
+          <button id="]" class="key">]</button>
+          <button id="bsla" class="key">\</button>
+        </div>
+        <div class="keyboard2">
+          <button class="key">CAPS LOCK</button>
+          <button id="a" class="key">A</button>
+          <button id="s" class="key">S</button>
+          <button id="d" class="key">D</button>
+          <button id="f" class="key">F</button>
+          <button id="g" class="key">G</button>
+          <button id="h" class="key">H</button>
+          <button id="j" class="key">J</button>
+          <button id="k" class="key">K</button>
+          <button id="l" class="key">L</button>
+          <button id="semi" class="key">;</button>
+          <button id="quo" class="key">'</button>
+          <button id="ret" class="key">RETURN</button>
+        </div>
+        <div class="keyboard3">
+          <button class="key">SHIFT</button>
+          <button id="z" class="key">Z</button>
+          <button id="x" class="key">X</button>
+          <button id="c" class="key">C</button>
+          <button id="v" class="key">V</button>
+          <button id="b" class="key">B</button>
+          <button id="n" class="key">N</button>
+          <button id="m" class="key">M</button>
+          <button id="com" class="key">,</button>
+          <button id="dot" class="key">.</button>
+          <button id="sla" class="key">/</button>
+          <button class="key">SHIFT</button>
+        </div>
+        <div class="keyboard4">
+          <!-- <button class="key">/</button> -->
+          <button class="key">CONTROL</button>
+          <button class="key">WINDOWS</button>
+          <button class="key">ALT</button>
+          <button id="spc" style="width: 619%" class="key" id="spaceKey 5fr">
+            SPACE
+          </button>
+          <!-- <button class="key key-alt2">ALT</button>
+          <button class="key key-ctrl2">CONTROL</button>  -->
+        </div>
+
+        <!-- Include all other keys -->
+        <!-- For brevity, including only a few keys -->
+        <div class="popup" id="popup">
+          <h2 id="pop-content"></h2>
+          <p class="desc">
+            Press Space, Once to continue to lessons. Twice to retake the test.
+          </p>
+          <div class="area">
+            <button type="button" class="poptext" onclick="redirectToHome()">
+              Continue
+            </button>
+            <button type="button" class="poptext" onclick="reloadTest()">
+              Retake
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <script src="script.js"></script> -->
+
+    <script>
+      var currentKey = 0;
+      var shiftPressed = false;
+      // textToSpeech("Let's check your finger placements");
+      // textToSpeech(
+      //   "if you do not know how to place your fingers. go to finger placement assist tab."
+      // );
+      // textToSpeech("Now, you will press the finger being dictated");
+      // textToSpeech("use shift to hear again");
+      function textToSpeech(text) {
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance();
+
+          utterance.text = text;
+
+          speechSynthesis.speak(utterance);
+        } else {
+          console.log("Speech synthesis not supported in this browser.");
+        }
+      }
+
+      function findIndex(character, keys) {
+        for (let rowIndex = 0; rowIndex < keys.length; rowIndex++) {
+          for (let colIndex = 0; colIndex < keys[rowIndex].length; colIndex++) {
+            if (character === keys[rowIndex][colIndex]) {
+              return [rowIndex, colIndex];
+            }
+          }
+        }
+        return null;
+      }
+      function playWarningSound() {
+        // Replace 'path/to/warning-sound.mp3' with the actual path to your sound file
+        var audio = new Audio("{% static 'audio/wrong-answer-126515.mp3' %}");
+        audio.play();
+      }
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+      $(document).keydown(function (event) {
+        // Check if the pressed key is Shift
+        if (event.key === "Shift") {
+          shiftPressed = true;
+          console.log("Shift key pressed");
+          textToSpeech(finKeys[testset[currentKey]]);
+        }
+      });
+
+      $(document).keyup(function (event) {
+        // Reset the shiftPressed variable when the Shift key is released
+        if (event.key === "Shift") {
+          shiftPressed = false;
+          console.log("Shift key released");
+        }
+      });
+      function navigate(charPressed, charToFind) {
+        const keys = [
+          ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+          ["a", "s", "d", "f", "g", "h", "j", "k", "l", ";"],
+          ["z", "x", "c", "v", "b", "n", "m"],
+        ];
+        const index1 = findIndex(charPressed, keys);
+        const index = findIndex(charToFind, keys);
+
+        const row = index[0] - index1[0];
+        const col = index[1] - index1[1];
+
+        let direction = "left";
+        let statement = "";
+
+        if (row === 0) {
+          statement = "the same row";
+        } else if (row < 0) {
+          statement = "the upper row";
+        } else {
+          statement = "the row below";
+        }
+
+        if (col > 0) {
+          direction = "right";
+        }
+
+        console.log(`The index of '${charPressed}' is: [${index1}]`);
+        console.log(`${Math.abs(col)} key to the ${direction} in ${statement}`);
+        // textToSpeech(`The index of '${charPressed}' is: [${index1}]`);
+        textToSpeech(
+          `${Math.abs(col)} key to the ${direction} in ${statement}`
+        );
+      }
+
+      let finKeys = {
+        f: "left index",
+        d: "left middle ",
+        s: "left ring",
+        a: "left pinky",
+        j: "right index",
+        k: "right middle",
+        l: "right ring",
+        ";": "right pinky",
+        " ": "left thumb",
+        " ": "right thumb",
+      };
+      let keys = Object.keys(finKeys);
+      const testset = Array(5)
+        .fill()
+        .map(() => keys[Math.floor(Math.random() * keys.length)]);
+
+      // Shuffle the array
+      shuffleArray(testset);
+
+      // Output the shuffled array
+      console.log(testset);
+      textToSpeech(finKeys[testset[0]]);
+      $(document).keypress(function (event) {
+        const charPressed = String.fromCharCode(event.which).toLowerCase();
+
+        var charToFind = testset[currentKey];
+        var id = charPressed;
+        if (id === ";") {
+          id = "semi";
+        } else if (id === " ") {
+          id = "spc";
+        }
+        var keyElement = document.getElementById(id);
+        if (shiftPressed) {
+          console.log("Shift key is still pressed");
+          // Handle the Shift key behavior here
+          return;
+        }
+        if (currentKey === testset.length - 1) {
+          console.log("done");
+          var subLevel = 2;
+          $.ajax({
+            type: "POST",
+            url: "/update_sublevel/",
+            data: {
+              sublevel: subLevel, // Use 'sublevel' as the key
+              csrfmiddlewaretoken: "{{ csrf_token }}", // Include CSRF token for security
+            },
+            success: function (response) {
+              console.log("Sublevel saved successfully");
+            },
+            error: function (error) {
+              console.error("Error saving sublevel:", error);
+            },
+          });
+          console.log(subLevel);
+          window.location.href = "/";
+        }
+        if (charPressed === charToFind) {
+          keyElement.style.borderColor = "green";
+          currentKey++;
+          console.log(currentKey);
+          console.log(subLevel);
+          textToSpeech("goodjob");
+          textToSpeech(finKeys[testset[currentKey]]);
+        } else {
+          keyElement.style.borderColor = "red";
+          playWarningSound();
+          navigate(charPressed, charToFind);
+          console.log(charPressed);
+          console.log(charToFind);
+        }
+      });
+    </script>
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navbar Example</title>
+    <style>
+      * {
+        font-family: Helvetica, Arial, sans-serif;
+      }
+      body {
+        margin: 0;
+        background-image: url("{% static 'images/background2.jpeg' %}");
+        background-size: 120% 120%;
+        height: 100vh;
+        /* font-family: Arial, sans-serif; */
+      }
+
+      nav {
+        background-color: #ffffff57;
+        overflow: hidden;
+        border-radius: 1vh;
+        transition: 0.25s;
+        margin: 1vh;
+        padding: 0.6vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+        border: solid;
+        border-color: #ffffff;
+        border-width: 0.4vh;
+      }
+
+      nav a {
+        float: left;
+
+        font-size: 150%;
+        padding: 12px 14px;
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        margin: 0px 2px;
+        text-decoration: none;
+        transition: 0.3s;
+        justify-content: center;
+      }
+      nav a:focus {
+        background-color: #ffffff;
+        color: black;
+        border-radius: 2vh;
+      }
+
+      nav a:hover {
+        background-color: #ffffff;
+        color: black;
+        border-radius: 2vh;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/beginner_guide">Beginner Guide</a>
+      <a href="">Lessons</a>
+      <a href="take_test">Test</a>
+      <a href="check_position">Check Position</a>
+      <a href="finger_placement_assist">Placement Assist</a>
+    </nav>
+
+    {% block content %}{% endblock %}
+  </body>
+  <script>
+    function speakText(text) {
+      var speech = new SpeechSynthesisUtterance(text);
+      speech.lang = "en-US";
+      window.speechSynthesis.speak(speech);
+    }
+    let ctrlPressed = false;
+    let ctrlCount = -1;
+    let navDict = {
+      lessons: "/",
+      test: "/take_test",
+      "check position": "/check_position",
+      "placement assist": "/finger_placement_assist",
+      "beginner guide": "beginner_guide",
+    };
+    let navContent = Object.keys(navDict);
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Control" || event.key === "Meta") {
+        ctrlPressed = true;
+        updateCount();
+      }
+      if (event.ctrlKey && event.key === " ") {
+        console.log(navContent[ctrlCount % 5]);
+        window.location.href = navDict[navContent[ctrlCount % 5]];
+      }
+    });
+
+    document.addEventListener("keyup", function (event) {
+      if (event.key === "Control" || event.key === "Meta") {
+        ctrlPressed = false;
+      }
+    });
+
+    function updateCount() {
+      if (ctrlPressed) {
+        ctrlCount++;
+      }
+      speakText(navContent[ctrlCount % 5]);
+    }
+  </script>
+</html>

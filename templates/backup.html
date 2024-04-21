@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Touch Typing Home</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    {% extends 'navbar.html' %} {% block content %} {% load static %}
+    <style>
+      body {
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 90vh;
+        background-image: url("{% static 'images/background2.jpeg' %}");
+        background-size: 120% 120%;
+        background-color: #000000;
+      }
+
+      .typing-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40%;
+        height: 20%;
+        background-color: #31313152;
+        border: 0.5vh solid #ffffff;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        color: #ffffff;
+        border-radius: 1vh;
+        backdrop-filter: blur(5px);
+      }
+
+      .keyboard {
+        /* background-color: aqua; */
+        transform: translateZ(0);
+        width: 65%;
+      }
+      .keyboard1 {
+        /* background-color: aqua; */
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(14, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+      }
+
+      .keyboard2 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(13, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+        justify-content: center;
+      }
+
+      .keyboard3 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+      }
+
+      .keyboard4 {
+        height: 30%;
+        display: grid;
+        grid-template-columns: repeat(11, 1fr);
+        grid-gap: 5px;
+        margin-top: 5px;
+        justify-content: center;
+        /* background-color: aquamarine; */
+      }
+
+      .key {
+        padding: 10px;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.185);
+        border: solid;
+        border-color: #ffffff;
+        border-width: 0.5vh;
+        color: #ffffff;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 15px;
+        backdrop-filter: blur(2px);
+        transition: 0.29s;
+      }
+
+      .key:hover {
+        backdrop-filter: blur(15px);
+        background-color: #00000077;
+      }
+
+      .key-alt2,
+      .key-ctrl2 {
+        color: #000000;
+        position: relative;
+        left: 521%;
+        cursor: pointer;
+        border-radius: 2px;
+        background-color: rgba(194, 98, 19, 0.6);
+        border: solid;
+        border-color: #6d6d6d;
+        border-width: 3px;
+      }
+      .poptext {
+        margin-right: 10px;
+        margin-left: 10px;
+        padding: 4px 6px;
+        background: rgba(255, 255, 255, 0.5);
+        border: 0;
+        outline: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.25s;
+      }
+      .poptext:hover {
+        background: rgba(255, 255, 255, 0.5);
+        /* color: white; */
+        border: solid;
+        border-color: rgba(255, 255, 255, 0.9);
+      }
+      .popup {
+        width: 300px;
+        height: 150px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0)
+        );
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        text-align: center;
+        padding: 0 30px 30px;
+        color: rgb(0, 0, 0);
+        border-color: rgba(255, 255, 255, 0.2);
+        visibility: hidden;
+        transition: transform 0.5s, top 0.5s;
+        border-style: solid;
+      }
+      .open-popup {
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+        top: 14%;
+      }
+      .area {
+        margin-top: 12px;
+      }
+      .popup h2 {
+        font-size: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .popup p {
+        font-size: 15px;
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>
+      <p style="justify-content: center">
+        The longest key in the middle of the last row is 'space'. Press 'space'
+        to go further in the lecture"
+      </p>
+      <ol id="dynamicList">
+        <!-- <li>The longest key in the middle of the last row is 'space'.</li>
+        <li>The longest key in the middle of the last row is 'space'.</li> -->
+      </ol>
+    </h3>
+    <!-- Include all other keys -->
+    <!-- For brevity, including only a few keys -->
+
+    <!-- <script src="script.js"></script> -->
+
+    <script>
+      function playWarningSound() {
+        // Replace 'path/to/warning-sound.mp3' with the actual path to your sound file
+        var audio = new Audio("{% static 'audio/wrong-answer-126515.mp3' %}");
+        audio.play();
+      }
+      function speakText(text) {
+        var speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US";
+        window.speechSynthesis.speak(speech);
+      }
+      function speakTextPriority(text) {
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        var speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US";
+        window.speechSynthesis.speak(speech);
+      }
+      speakText("The longest key in the middle of the last row is 'space'.");
+      speakText("Press 'space' to go further in the lecture");
+      let spcPressed = false;
+      let spcCount = 0;
+      var shiftPressed = false;
+      let olElement = document.getElementById("dynamicList");
+      let shiftCount = 0;
+
+      let bgDict = {
+        0: "Every page has 5 options in the navbar, Lessons, Test, Check Position, Placement Assist",
+        1: "The bottom-left most key in your keyboard is 'control'.",
+        2: "Press 'Control' to hear options.",
+        3: "The key right above the control is your 'shift key'",
+        4: "Press 'Shift' to repeat. Note that, Shift will not repeat the options in the navbar",
+        5: "Hold down 'control' and press 'space' to select the option you heard.",
+        6: "Repeated shift keys can take you back to previous utterance.",
+      };
+      let bgContent = Object.keys(bgDict);
+      var flag = false;
+
+      document.addEventListener("keydown", function (event) {
+        if (event.keyCode === 32) {
+          window.speechSynthesis.cancel();
+
+          flag = false;
+          shiftCount = 0;
+          spcPressed = true;
+          if (spcCount === 7) {
+            speakTextPriority("End of Beginner Guide");
+          } else {
+            console.log(spcCount);
+            console.log(bgDict[bgContent[spcCount % 7]]);
+            let listItem = document.createElement("li");
+
+            listItem.textContent = bgDict[bgContent[spcCount % 7]];
+
+            olElement.appendChild(listItem);
+
+            speakText(bgDict[bgContent[spcCount % 7]]);
+            spcCount++;
+          }
+        }
+        if (event.key === "Shift") {
+          window.speechSynthesis.cancel();
+
+          if (flag) {
+            playWarningSound();
+          } else if (spcCount === 0) {
+            playWarningSound();
+            spcCount = 0;
+            flag = true;
+          } else {
+            shiftCount++;
+            shiftPressed = true;
+            console.log("Shift key pressed");
+            if (shiftCount > 1 && spcCount > 0) {
+              if (spcCount > 0) {
+                spcCount--;
+              }
+              console.log(spcCount % 7);
+              olElement.removeChild(olElement.children[spcCount % 7]);
+              console.log("removed :", olElement.children[spcCount % 7]);
+            }
+
+            speakText(bgDict[bgContent[(spcCount % 8) - 1]]);
+          }
+        }
+      });
+
+      document.addEventListener("keyup", function (event) {
+        if (event.keyCode === 32) {
+          spcPressed = false;
+        }
+        if (event.key === "Shift") {
+          shiftPressed = false;
+          console.log("Shift key released");
+        }
+      });
+    </script>
+    {% endblock %}
+  </body>
+</html>
